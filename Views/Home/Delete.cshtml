@@ -1,0 +1,41 @@
+﻿@model EventManager.Models.Event
+
+<h2>Delete</h2>
+@using (Html.BeginForm("delete","home", FormMethod.Post,new { id= "popupForm" }))
+{
+    @Html.HiddenFor(a=>a.Id)
+    <div class="form-group">
+        <label>Name</label>
+        <p>@Model.Name</p>
+    </div>
+
+    <div class="form-group">
+        <label>Name</label>
+        <p>@Model.Location</p>
+    </div>
+
+    <div class="form-group">
+        <label>Start Date</label>
+        <p>@Model.StartDate</p>
+    </div>
+
+    <div class="form-group">
+        <label>Time</label>
+        <p>@Model.StartDateTime</p>
+    </div>
+
+    <div class="form-group">
+        <label>End Date</label>
+        <p>@Model.EndDate</p>
+    </div>
+
+    <div class="form-group">
+        <label>Time</label>
+        <p>@Model.EndDateTime</p>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" class="btn btn-danger btn btn-default btn-lg" value="Delete" />
+    </div>
+
+}

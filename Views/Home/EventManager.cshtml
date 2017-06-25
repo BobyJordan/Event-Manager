@@ -1,0 +1,134 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <style>
+        span.field-validation-error {
+            color:red;
+        }
+        #myDatatable{
+            border-radius: 25px;
+            border: 2px solid #5BC0DE;
+            padding: 20px;
+            width: 200px;
+        }
+    </style>
+</head> 
+    <body> 
+        <div style="width:90%; margin-top:20px; margin-left:50px" class="tableContainer"> 
+                <table id="myDatatable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Start Date</th>
+                            <th>Time</th>
+                            <th>End Date</th>
+                            <th>Time</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                </table>
+            <a class="popup btn btn-info btn btn-default btn-lg btn-block" href="/home/save/0/" style="margin-bottom:20px; margin-top:20px; margin-left:auto; margin-right:auto;">Add new Event</a>
+            </div> 
+        <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+        <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                var oTable = $('#myDatatable').DataTable({
+                        "ajax": {
+                            "url": '/home/GetEvent',
+                            "type": "get",
+                            "datatype" : "json"
+                        },
+                        "columns": [
+                            { "data": "Name", "autoWidth": true },
+                            { "data": "Location", "autoWidth": true },
+                            { "data": "StartDate", "autoWidth": true },
+                            { "data": "StartDateTime", "autoWidth": true },
+                            { "data": "EndDate", "autoWidth": true },
+                            { "data": "EndDateTime", "autoWidth": true },
+                        
+                            { 
+                                "data": "Id", "width": "50px", "render": function(data) {
+                                    return '<a class="popup" href="home/save/'+data+'">Edit</a>';
+                                }
+                            },
+                            {
+                                "data": "Id", "width": "50px", "render": function(data) {
+                                    return '<a class="popup" href="home/delete/'+data+'">Delete</a>';
+                                }
+                            }
+                        ]
+                    })
+
+                $('.tableContainer').on('click', 'a.popup', function (e) {
+                    e.preventDefault();
+                    OpenPopup($(this).attr('href'));
+
+                })
+
+                function OpenPopup(pageUrl) {
+                    var $pageContent = $('<div/>');
+                    $pageContent.load(pageUrl, function()
+                    {
+                        $('#popupForm', $pageContent).removeData('validator');
+                        $('#popupForm', $pageContent).removeData('unobtrusiveValidation');
+                        $.validator.unobtrusive.parse('form');
+
+                    });
+
+                    $dialog = $('<div class="popupWindow" style="overflow:auto"></div>')
+                        .html($pageContent)
+                        .dialog({
+                            draggable: true,
+                            autoOpen: false,
+                            resizable: false,
+                            model: true,
+                            title: 'Pop Up',
+                            height: 550,
+                            width: 600,
+                            close: function () {
+                                 $dialog.dialog('destroy').remove();
+                        }
+                    })
+                    $('.popupWindow').on('submit', '#popupForm', function (e)
+
+                    {
+                        var url = $('#popupForm')[0].action;
+                        $.ajax({
+                            type : "POST",
+                            url : url,
+                            data: $('#popupForm').serialize(),
+                            success: function (data) {
+                                if (data.status)
+                                {
+                                    $dialog.dialog('close');
+                                    oTable.ajax.reload();
+                                }
+                            }
+                        })
+                        e.preventDefault();
+                    })
+                    $dialog.dialog('open');
+                }
+            })
+        </script>
+    </body> 
+</html>
+        

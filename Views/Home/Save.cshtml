@@ -1,0 +1,52 @@
+﻿@model EventManager.Models.Event
+
+<h2>Save</h2>
+@using (Html.BeginForm("save","home", FormMethod.Post, new { id = "popupForm" }))
+{
+    if (Model != null && Model.Id > 0)
+    {
+        @Html.HiddenFor(a => a.Id)
+    }
+
+    <div class="form-group">
+        <label>Name</label>
+        @Html.TextBoxFor(a=>a.Name, new { @class="form-control"})
+        @Html.ValidationMessageFor(a=>a.Name)
+    </div>
+
+    <div class="form-group">
+        <label>Location</label>
+        @Html.TextBoxFor(a => a.Location, new { @class ="form-control"})
+        @Html.ValidationMessageFor(a => a.Location)
+    </div>
+
+    <div class="form-group">
+        <label>Start Date</label>
+        @Html.TextBoxFor(a => a.StartDate, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.StartDate)
+    </div>
+
+    <div class="form-group">
+        <label>Time</label>
+        @Html.TextBoxFor(a => a.StartDateTime, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.StartDateTime)
+    </div>
+
+    <div class="form-group">
+        <label>End Date</label>
+        @Html.TextBoxFor(a => a.EndDate, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.EndDate)
+    </div>
+
+    <div class="form-group">
+        <label>Time</label>
+        @Html.TextBoxFor(a => a.EndDateTime, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.EndDateTime)
+    </div>
+
+    
+    <div class="form-group">
+        <input type="submit" class="btn btn-success btn btn-default btn-lg" value="Save"/>
+    </div>
+
+}
